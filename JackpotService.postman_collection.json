@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "beec2a71-678d-4144-a63a-b733304bb811",
+		"name": "JackpotService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24246842"
+	},
+	"item": [
+		{
+			"name": "1.1 Save Jackpots",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"name\":\"Jackpot-Fixed-1\",\r\n        \"initialPool\": 10.0,\r\n        \"currentPool\": 0.0,\r\n        \"maxPool\": 100.0,\r\n        \"contributionType\": \"FIXED\",\r\n        \"fixedContributionPercentage\":0.1,\r\n        \"initialContributionPercentage\":0.5,\r\n        \"contributionDecayRate\": 0.1,\r\n        \"rewardType\":\"FIXED\",\r\n        \"fixedRewardChance\":0.5\r\n        \r\n    },\r\n    {\r\n        \"name\":\"Jackpot-Variable-1\",\r\n        \"initialPool\": 10.0,\r\n        \"currentPool\": 0.0,\r\n        \"maxPool\": 100.0,\r\n        \"contributionType\": \"VARIABLE\",\r\n        \"initialContributionPercentage\":0.5,\r\n        \"contributionDecayRate\": 0.1,\r\n        \"rewardType\":\"VARIABLE\"\r\n\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/jackpots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"jackpots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.2 Get Jackpots",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/jackpots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"jackpots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1.3 Get Jackpot by Id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "1.4 Save a Jackpot",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Jackpot-1\",\r\n    \"initialPool\": 10.0,\r\n    \"currentPool\": 5.0,\r\n    \"contributionType\": \"FIXED\",\r\n    \"rewardType\":\"FIXED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/jackpots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"jackpots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.1 Publish Bet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"idemPotencyKey\",crypto.randomUUID);\r",
+							"//console.log(pm.variables.get(\"idemPotencyKey\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Idempotency-key",
+						"value": "{{$guid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"betId\":\"bet-fixed-1\",\r\n    \"userId\": 5001,\r\n    \"jackpotId\": 1,\r\n    \"betAmount\":100\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/bets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.2 Get Bets",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"idemPotencyKey\",crypto.randomUUID);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Evaluate Bet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"idemPotencyKey\",crypto.randomUUID);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/bets/bet-fixed-1/evaluate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bets",
+						"bet-fixed-1",
+						"evaluate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2.2 Publish a Variable Bet",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"idemPotencyKey\",crypto.randomUUID);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Idempotency-key",
+						"value": "{{idemPotencyKey}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"bet-1\",\r\n    \"userId\": 5001,\r\n    \"jackpotId\": 1,\r\n    \"betAmount\":200.5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/bets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"bets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
