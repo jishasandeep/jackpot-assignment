@@ -90,6 +90,9 @@ Service publish the event to the Kafka topic `jackpot-bets`. The consumer will p
 If kafka enabled is false in application.yml then the event is logged and bet processing method is invoked from the service class.
 The database is H2 in-memory. Console available at http://localhost:8080/h2-console
 
+## Open API definition
+http://localhost:8080/swagger-ui/index.html
+
 ## Design pattern 
 Factory pattern is used for Contribution and Reward strategies. Option to add more strategies in future
 
